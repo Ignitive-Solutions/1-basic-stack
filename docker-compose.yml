@@ -1,0 +1,58 @@
+version: '3.8'
+
+volumes:
+  n8n_data:
+
+networks:
+  dev_stack_network:
+    driver: bridge
+
+services:
+  backend_api:
+    build:
+      context: ./backend_app
+      dockerfile: Dockerfile
+    container_name: backend_api
+    restart: unless-stopped
+    env_file:
+      - .env # Load environment variables from .env file
+    ports:
+      - "8000:8000" # Expose FastAPI port
+    volumes:
+      - ./backend_app:/app # Mount source code for development (optional, remove for production image build)
+    networks:
+      - dev_stack_network
+    # Add depends_on if backend needs database to be ready (not applicable here as DB is external)
+
+  n8n:
+    image: n8nio/n8n:latest
+    container_name: n8n
+    restart: unless-stopped
+    ports:
+      - "5678:5678"
+    env_file:
+      - .env # Load environment variables from .env file
+    environment:
+      # n8n specific config - can be moved to .env if preferred
+      - N8N_HOST=${N8N_HOSTNAME:-localhost} # Use N8N_HOSTNAME from .env or default to localhost
+      - WEBHOOK_URL=https://${N8N_HOSTNAME:-localhost}:5678/ # Adjust if using different domain/port
+      - GENERIC_TIMEZONE=${GENERIC_TIMEZONE:-Asia/Singapore} # Set your timezone
+      - N8N_DIAGNOSTICS_ENABLED=false
+      - N8N_PERSONALIZATION_ENABLED=false
+      # Add DB connection details if n8n needs its own DB (using default SQLite here)
+      # If using external Postgres for n8n itself (different from agent DB):
+      # - DB_TYPE=postgresdb
+      # - DB_POSTGRESDB_HOST=your_n8n_db_host
+      # - DB_POSTGRESDB_USER=your_n8n_db_user
+      # - DB_POSTGRESDB_PASSWORD=${N8N_DB_PASSWORD}
+      # - DB_POSTGRESDB_DATABASE=your_n8n_db_name
+      # - DB_POSTGRESDB_PORT=5432
+      # - DB_POSTGRESDB_SSL_REJECT_UNAUTHORIZED=false # Adjust based on your DB SSL setup
+    volumes:
+      - n8n_data:/home/node/.n8n
+      # Mount shared volume if needed for file triggers/access between host and n8n
+      # - ./shared:/data/shared
+    networks:
+      - dev_stack_network
+    depends_on:
+      - backend_api # Optional: ensure backend starts before n8n if n8n calls it on startup
