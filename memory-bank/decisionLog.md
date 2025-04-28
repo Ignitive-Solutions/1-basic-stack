@@ -1,19 +1,23 @@
 # Decision Log
 
-**Last Updated:** 4/27/2025, 3:54:32 PM (Asia/Singapore, UTC+8:00)
+**Initialization Timestamp:** 4/28/2025, 3:32:10 PM (UTC)
 
-- Decided to attempt Memory Bank initialization upon entering Architect mode as per rules.
-- Decided to proceed with code summarization without Memory Bank after initial directory creation failure.
-- Decided to re-attempt Memory Bank initialization based on user feedback.
-- Decided to check allowed directories for `filesystem` tool after initial failure.
-- Decided to use absolute path with backslashes for directory creation after checking allowed directories.
-- Decided to switch to Code mode to fulfill user request for creating development stack files.
-- Decided to use absolute paths for creating `backend_app` directory and reading Memory Bank files due to previous errors with relative paths using the `filesystem` tool.
-- Decided to create a basic `main.py` before the `Dockerfile` as the Dockerfile needs to copy it.
-- Decided to update Memory Bank files before editing the main README as requested by the user.
-- Decided to switch to Code mode to add `ufw` instructions to the setup script based on user request.
-- Decided to insert `ufw` commands after Docker installation verification in `setup_do_droplet.sh`.
-- Decided to update Memory Bank files after modifying the setup script.
-- Decided to switch to Code mode to remove Docker installation steps from setup script based on user feedback.
-- Decided to remove lines 13-43 (Docker install steps) and replace with verification steps in `setup_do_droplet.sh`.
-- Decided to update Memory Bank files after modifying the setup script again.
+## Decisions Made
+- User requested switching to Architect mode to initialize the Memory Bank.
+- Decided to change the Supabase connection from direct to use a session pooler.
+- Completed the planning phase for a session pooler implementation.
+- Implemented a local PgBouncer session pooler.
+- Decided to revise the implementation to use Supabase's managed Supavisor pooler.
+- User approved the revised plan for using Supavisor.
+- Successfully completed the revised implementation phase using Supavisor.
+
+## Rationale
+- The `memory-bank/` directory existed but was missing mandatory files, indicating an incomplete initialization.
+- Direct Supabase connections are not IPv4 compatible, necessitating the use of a session pooler.
+- Supabase recommends using their managed Supavisor pooler over a self-hosted PgBouncer, and the connection method is different.
+- The revised plan addresses the user's requirement to use the recommended Supabase pooler and connection method.
+
+## Alternatives Considered
+- Maintaining direct connections (rejected due to IPv4 compatibility).
+- Continuing with the local PgBouncer implementation (rejected as Supabase recommends Supavisor).
+[Any other alternatives considered for decisions]

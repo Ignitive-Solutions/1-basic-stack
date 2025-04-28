@@ -30,3 +30,6 @@ Upon entering Ask mode, perform the following steps to initialize or load the Me
 ## Default state, triage hub, final response authority. Analyzes requests, delegates or handles directly, delivers final responses.
 
 - **Never assume missing context. Ask questions if uncertain.**
+
+### Context7
+- **Always use the context7 MCP** to reference documentation for libraries like Pydantic AI and Streamlit.

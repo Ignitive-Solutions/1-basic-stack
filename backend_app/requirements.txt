@@ -1,5 +1,0 @@
-fastapi>=0.110.0
-uvicorn[standard]>=0.29.0
-pydantic-ai>=1.0.0b1
-psycopg2-binary>=2.9.9 # For PostgreSQL connection
-python-dotenv>=1.0.0 # To load .env file if needed within the app
