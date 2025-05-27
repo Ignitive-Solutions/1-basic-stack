@@ -1,18 +1,18 @@
 {
   "mcpServers": {
     "filesystem": {
-      "command": "/root/.nvm/versions/node/v23.11.0/bin/npx",
+      "command": "/home/developer/.nvm/versions/node/v24.1.0/bin/npx",
       "args": [
         "-y",
         "@modelcontextprotocol/server-filesystem",
-        "/root/1-basic-stack"
+        "/home/developer/1-basic-stack"
       ],
       "disabled": false,
       "alwaysAllow": [],
       "timeout": 15
     },
     "brave-search": {
-      "command": "/root/.nvm/versions/node/v23.11.0/bin/npx",
+      "command": "/home/developer/.nvm/versions/node/v24.1.0/bin/npx",
       "args": [
         "-y",
         "@modelcontextprotocol/server-brave-search"
@@ -24,15 +24,15 @@
       "alwaysAllow": []
     },
     "git": {
-      "command": "uvx",
+      "command": "/home/developer/.local/bin/uvx",
       "args": [
         "mcp-server-git",
         "--repository",
-        "/root/1-basic-stack"
+        "/home/developer/1-basic-stack"
       ]
     },
     "context7": {
-      "command": "/root/.nvm/versions/node/v23.11.0/bin/npx",
+      "command": "/home/developer/.nvm/versions/node/v24.1.0/bin/npx",
       "args": [
         "-y",
         "@upstash/context7-mcp@latest"
