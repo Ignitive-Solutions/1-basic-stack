@@ -3,37 +3,42 @@
 ### Core Workflow
 ```mermaid
 graph TD
-    A[Ask: New Request] --> B{Analyze Request};
-    B --> |Requires Design/Planning| C[Architect: Design & Plan];
-    C --> D[Orchestrate: Coordinate Workflow];
-    B --> |Simple Query| A;
-    D --> |Delegate Code Task| E[Code: Implement Task];
-    E --> F[Test: Write & Run Tests];
-    F --> |Tests Pass| D;
-    F --> |Tests Fail (1-2 times)| E;
-    F --> |Tests Fail (3 times)| D;
-    D --> |Synthesize Results| G[Ask: Deliver Final Response];
-    E --> |Debug Needed| H[Debug: Diagnose & Fix];
-    H --> E;
+    UserInput[User Request] --> A[Ask: Capture & Initial Triage];
+    A --> |Needs Design/Planning or MB Init| C[Architect: Design, Plan, Manage Memory Bank];
+    A --> |Direct to Orchestrator| D[Orchestrator: Analyze Request, Coordinate Workflow];
+    C --> |Design/Plan Ready, MB Active| D;
 
-    %% Memory Bank Integration
-    subgraph Memory Bank
-        MB[Memory Bank Files]
+    D --> |Delegate Code Task with Context| E[Code: Implement Task];
+    E --> |Code Ready/Needs Debug| D;
+    %% Code reports to Orchestrator
+    D --> |Send Code for Testing| F[Test: Write & Run Tests];
+    F --> |Test Results| D;
+    %% Test reports to Orchestrator
+
+    D --> |Escalate Test Failures/Debug Needed| H[Debug: Diagnose & Fix];
+    H --> |Diagnosis/Fix Suggestion| D;
+    %% Debug reports to Orchestrator
+
+    D --> |Synthesize Results/Needs Clarification| A;
+    A --> FinalOutput[Deliver Final Response to User];
+
+    %% Memory Bank (Architect is Custodian)
+    subgraph "Memory Bank (Managed by Architect)"
+        MB[Memory Bank Files: productContext.md, activeContext.md, progress.md, decisionLog.md, systemPatterns.md, PLANNING.MD]
     end
 
-    C --> MB
-    E --> MB
-    H --> MB
-    A --> MB
-    D --> MB
-    F --> MB
+    C -- Manages & Updates --> MB;
+    %% Other modes read from MB, often via context provided by Orchestrator
+    D -- Reads from & Provides Context from --> MB;
+    E -- Reads from (via Orchestrator's context) --> MB;
+    F -- Reads from (via Orchestrator's context) --> MB;
+    H -- Reads from (via Orchestrator's context) --> MB;
+    A -- Reads from --> MB;
 
-    MB --> C
-    MB --> E
-    MB --> H
-    MB --> A
-    MB --> D
-    MB --> F
+    %% TASK.MD (Architect Initiates, Orchestrator Maintains)
+    TM[TASK.MD]
+    C -- Initiates Tasks in --> TM;
+    D -- Maintains/Updates --> TM;
 ```
 
 ### Detailed Protocol
